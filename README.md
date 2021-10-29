@@ -17,7 +17,7 @@ A API tem um padrão de arquitetura REST, e aceita requisições do tipo GET, PU
 A API está baseada em QR Codes, e a toda e qualquer visita. Quando uma visita é criada, o QR Code para autenticação da mesma é gerado e enviado para o visitante, permitindo assim a sua autenticação com base no QRCode.
 </p>
 
-<h1 align="center">Conteúdo</h1>
+<h1 align="center">🧾 Conteúdo</h1>
 <p align="center">
  <a href="#objetivo">Objetivo</a> •
  <a href="#tecnologias">Tecnologias</a> •
