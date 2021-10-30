@@ -4,6 +4,7 @@ services:
   nginx:
     image: nginx:latest
     container_name: nginx
+    restart: always
     depends_on:
       - "starburst-qr-api"
     volumes:

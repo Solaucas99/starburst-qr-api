@@ -35,12 +35,15 @@ Facilitar o fluxo de visitas em qualquer local, permitindo que tudo seja automat
 
 <h2 align="center" id="tecnologias">🛠 Tecnologias</h2>
 
-As seguintes ferramentas foram usadas na construção do projeto:
+As seguintes ferramentas foram usadas na construção do projeto (geral):
 
 - [Node.js](https://nodejs.org/en/)
 - [TypeScript](https://www.typescriptlang.org/)
-- [ExpressJS](https://expressjs.com/)
-- [Mongoose](https://mongoosejs.com/)
+- [MongoDB](https://www.mongodb.com)
+- [NextJS](https://nextjs.org/)
+- [Amazon AWS](https://aws.amazon.com/)
+- [React Native](https://reactnative.dev/)
+- [Docker](https://www.docker.com/)
 
 
 <h2 align="center" id="licenca">🔒 Licença</h2>
