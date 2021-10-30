@@ -1,3 +1,8 @@
 node_modules
 __tests__
 jest
+test
+prettierrc
+globalConfig.json
+.env.test
+.eslintrc.js
