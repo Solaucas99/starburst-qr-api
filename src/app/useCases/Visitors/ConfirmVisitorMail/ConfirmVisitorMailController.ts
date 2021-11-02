@@ -14,7 +14,7 @@ export class ConfirmVisitorMailController {
       const { id } = req.params;
       const { generated_pass, visitor_link_id } = req.body;
 
-      const visitor = await this.confirmVisitorMailUseCase.execute(
+      await this.confirmVisitorMailUseCase.execute(
         id,
         generated_pass,
         visitor_link_id,
@@ -28,7 +28,6 @@ export class ConfirmVisitorMailController {
 
       return res.status(200).json({
         message: 'Visitante confirmado com sucesso!',
-        data: visitor,
       });
     } catch (err: any) {
       return res.status(400).json({ message: 'Unexpected Error' });

@@ -1,3 +1,7 @@
+import JWT from 'jsonwebtoken';
+import fs from 'fs';
+import path from 'path';
+
 import createLinkToken from '../../../../services/utils/createLinkToken';
 import VisitorLinkMail from '../../../../templates/VisitorLinkMail';
 import { IVisitorLinkGen } from '../../../entities/IVisitorLinkGen';
@@ -78,11 +82,21 @@ export class CreateVisitorLinkUseCase {
       if (!createdVisitorLink || !createdVisitorLink._id)
         throw new Error('Unexpected error');
 
+      const key: any = fs.readFileSync(
+        path.resolve(__dirname, '../../../../utils/jwk/privateKey.pem'),
+      );
+
+      const JWTtoken = JWT.sign({ bie: mailHmacEncrypted }, key, {
+        algorithm: 'RS256',
+        expiresIn: '4d',
+      });
+
       const sendMail = await this.mailProvider.sendMail(
         VisitorLinkMail(
           email,
           mailHmacEncrypted,
           token,
+          JWTtoken,
           createdVisitorLink._id,
         ),
       );

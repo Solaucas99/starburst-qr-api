@@ -1,11 +1,15 @@
 import { IVisitorsRepository } from '../../../repositories/visitors/IVisitorsRepository';
 import { IError } from '../../../../interfaces/IError';
 import { IVisitor } from '../../../entities/IVisitor';
+import { IDecryptDataProvider } from '../../../providers/others/cryptojs/IDecryptDataProvider';
 
 export class FindVisitorUseCase {
   private _errors: IError[] = [];
 
-  constructor(private visitorsRepository: IVisitorsRepository) {}
+  constructor(
+    private visitorsRepository: IVisitorsRepository,
+    private decryptDataProvider: IDecryptDataProvider,
+  ) {}
 
   public get errors(): IError[] {
     return this._errors;
@@ -27,17 +31,22 @@ export class FindVisitorUseCase {
         return;
       }
 
+      visitor.email = this.decryptDataProvider.executeAES(visitor.email);
+      visitor.cpf = this.decryptDataProvider.executeAES(visitor.cpf);
+      delete visitor.bic;
+      delete visitor.bie;
+
       return visitor;
     } catch (err: any) {
       throw new Error(err);
     }
   }
 
-  public async executeByAttribute(
-    attributes: Partial<Omit<IVisitor, '_id'>>,
-  ): Promise<IVisitor | void> {
+  public async executeByAttribute(attributes: {
+    bie: string;
+  }): Promise<IVisitor | void> {
     try {
-      if (!attributes.nome && !attributes.bie) {
+      if (!attributes.bie) {
         this._errors.push({
           errStatus: 404,
           errMessage: 'Página não encontrada.',
@@ -56,6 +65,11 @@ export class FindVisitorUseCase {
         });
         return;
       }
+
+      visitor.email = this.decryptDataProvider.executeAES(visitor.email);
+      visitor.cpf = this.decryptDataProvider.executeAES(visitor.cpf);
+      delete visitor.bic;
+      delete visitor.bie;
 
       return visitor;
     } catch (err: any) {

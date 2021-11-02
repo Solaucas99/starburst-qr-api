@@ -26,7 +26,7 @@ export class FindVisitorController {
       }
 
       const visitors = await this.findVisitorUseCase.executeByAttribute({
-        ...req.query,
+        bie: req.query.bie as string,
       });
 
       if (this.findVisitorUseCase.errors.length > 0) {
@@ -37,7 +37,12 @@ export class FindVisitorController {
 
       return res.status(200).json({
         message: 'Visitante(s) encontrado(s) com sucesso.',
-        data: visitors,
+        visitorId: visitors?._id,
+        visitorData: {
+          name: visitors?.nome,
+          email: visitors?.email,
+          phone: visitors?.phone,
+        },
       });
     } catch (err: any) {
       return res.status(400).json({ message: 'Unexpected Error' });

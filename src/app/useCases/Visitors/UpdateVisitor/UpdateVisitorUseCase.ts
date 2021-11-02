@@ -5,6 +5,7 @@ import { IMailProvider } from '../../../providers/mail/IMailProvider';
 import { IEncryptDataProvider } from '../../../providers/others/cryptojs/IEncryptDataProvider';
 import { IValidationProvider } from '../../../providers/validators/IValidationProvider';
 import { IVisitorsRepository } from '../../../repositories/visitors/IVisitorsRepository';
+import { ICreateUpdateVisitorLinkRepository } from '../../../repositories/visitors/updateVisitorLink/ICreateUpdateVisitorLinkRepository';
 import { IError } from '../../../../interfaces/IError';
 
 export class UpdateVisitorUseCase {
@@ -12,6 +13,7 @@ export class UpdateVisitorUseCase {
 
   constructor(
     private visitorsRepository: IVisitorsRepository,
+    private updateVisitorLinkRepository: ICreateUpdateVisitorLinkRepository,
     private mailProvider: IMailProvider,
     private encryptDataProvider: IEncryptDataProvider,
     private validationProvider: IValidationProvider,
@@ -28,7 +30,8 @@ export class UpdateVisitorUseCase {
   public async execute(
     visitor: Partial<Omit<IVisitor, 'cpf'>>,
     id: string,
-  ): Promise<IVisitor | void> {
+    updateVisitorLinkId: string,
+  ): Promise<IVisitor | void | string> {
     try {
       const visitorMailConfirmed =
         await this.visitorsRepository.findVisitorById(id);
@@ -107,9 +110,22 @@ export class UpdateVisitorUseCase {
         ...visitor,
       });
 
-      if (!newVisitor) throw new Error('Unexpected error');
+      const clearVisitorLink =
+        await this.updateVisitorLinkRepository.deleteUpdateVisitorLinkById(
+          updateVisitorLinkId,
+        );
 
-      return newVisitor;
+      if (!clearVisitorLink) {
+        this._errors.push({
+          errStatus: 400,
+          errMessage: 'Ocorreu um erro! Tente novamente mais tarde.',
+        });
+        return;
+      }
+
+      if (!newVisitor || !newVisitor._id) throw new Error('Unexpected error');
+
+      return newVisitor._id;
     } catch (err: any) {
       throw new Error(err);
     }

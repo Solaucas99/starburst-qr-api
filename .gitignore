@@ -29,6 +29,7 @@ globalConfig.json
 jest-mongodb-config.js
 jest.config.js
 nodemon.json
+**/jwk
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json

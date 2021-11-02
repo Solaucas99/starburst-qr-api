@@ -1,11 +1,15 @@
 import { IVisitorsRepository } from '../../../repositories/visitors/IVisitorsRepository';
 import { IError } from '../../../../interfaces/IError';
 import { IVisitor } from '../../../entities/IVisitor';
+import { IDecryptDataProvider } from '../../../providers/others/cryptojs/IDecryptDataProvider';
 
 export class FindAllVisitorUseCase {
   private _errors: IError[] = [];
 
-  constructor(private visitorsRepository: IVisitorsRepository) {}
+  constructor(
+    private visitorsRepository: IVisitorsRepository,
+    private decryptDataProvider: IDecryptDataProvider,
+  ) {}
 
   public get errors(): IError[] {
     return this._errors;
@@ -27,7 +31,16 @@ export class FindAllVisitorUseCase {
         return;
       }
 
-      return visitors;
+      const decryptedVisitors = visitors.map((visitor) => {
+        const visitorObj = visitor;
+        visitorObj.cpf = this.decryptDataProvider.executeAES(visitor.cpf);
+        visitorObj.email = this.decryptDataProvider.executeAES(visitor.email);
+        delete visitorObj.bic;
+        delete visitorObj.bie;
+        return visitorObj;
+      });
+
+      return decryptedVisitors;
     } catch (err: any) {
       throw new Error(err);
     }

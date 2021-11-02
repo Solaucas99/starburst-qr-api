@@ -3,14 +3,14 @@ import { IDecryptDataProvider } from '../IDecryptDataProvider';
 
 class DecryptDataProvider implements IDecryptDataProvider {
   public executeAES(dataToDecrypt: string): string {
+    if (!dataToDecrypt) return '';
+
     const decrypt = cryptojs.AES.decrypt(
       dataToDecrypt,
       process.env.SECRET_CRYPTO_JS as string,
     ).toString(cryptojs.enc.Utf8);
 
-    const parsed = JSON.parse(decrypt);
-
-    return parsed;
+    return decrypt.replace(/(["])/g, ''); //eslint-disable-line
   }
 }
 

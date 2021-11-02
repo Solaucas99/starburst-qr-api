@@ -2,8 +2,10 @@ import { IMessage } from '../app/providers/mail/IMailProvider';
 
 export default function generateVisitorMail(
   destinataryEmail: string,
+  destinataryBie: string,
   destinataryId: string,
   tokenLink: string,
+  jwtToken: string,
   linkId: string,
 ): IMessage {
   return {
@@ -24,7 +26,7 @@ export default function generateVisitorMail(
       Clique no link abaixo para prosseguir a atualização dos dados.
       Lembrando que o link irá expirar em 4 dias e quando isso ocorrer você não poderá fazer a atualização.
 
-      ${process.env.URL_MAILENDPOINT}/visitors/update?access=${tokenLink}&generatedId=${linkId}&visitorId=${destinataryId}
+      ${process.env.URL_MAILENDPOINT}/visitors/update?access=${tokenLink}&generatedId=${linkId}&visitorId=${destinataryId}&auth=${jwtToken}&bie=${destinataryBie}
 
       Obrigado!
       `,
@@ -33,10 +35,10 @@ export default function generateVisitorMail(
       <p>Um de nossos administradores deseja que você atualize seus dados de cadastro: ${process.env.ENTERPRISE_NAME}.</p><br>
 
       <p>Clique no link abaixo para prosseguir a atualização dos dados.</p>
-      <p> Lembrando que o link irá expirar em 4 dias e quando isso ocorrer você não poderá fazer a atualização.</p>
+      <p>Lembrando que o link irá expirar em 4 dias e quando isso ocorrer você não poderá fazer a atualização.</p>
 
 
-      <p><b><a href=" ${process.env.URL_MAILENDPOINT}/visitors/update?access=${tokenLink}&generatedId=${linkId}&visitorId=${destinataryId}">Clique aqui!</a></b></p><br>
+      <p><b><a href=" ${process.env.URL_MAILENDPOINT}/visitors/update?access=${tokenLink}&generatedId=${linkId}&visitorId=${destinataryId}&auth=${jwtToken}&bie=${destinataryBie}">Clique aqui!</a></b></p><br>
 
       <b>Obrigado!</b>
       `,

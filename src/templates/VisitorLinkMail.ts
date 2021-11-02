@@ -4,6 +4,7 @@ export default function generateVisitorMail(
   destinataryEmail: string,
   destinataryBie: string,
   tokenLink: string,
+  jwtToken: string,
   linkId: string,
 ): IMessage {
   return {
@@ -25,7 +26,7 @@ export default function generateVisitorMail(
       Lembrando que o link irá expirar em 4 dias e quando isso ocorrer você não poderá se cadastrar mais.
       Após o primeiro cadastro você poderá fazer inúmeras visitas, desde que marcadas com os nossos colaboradores.
 
-      ${process.env.URL_MAILENDPOINT}/visitors/register?access=${tokenLink}&generatedId=${linkId}&bie=${destinataryBie}
+      ${process.env.URL_MAILENDPOINT}/visitors/register?access=${tokenLink}&generatedId=${linkId}&bie=${destinataryBie}&auth=${jwtToken}
 
       Obrigado!
       `,
@@ -38,7 +39,7 @@ export default function generateVisitorMail(
       <p>Após o primeiro cadastro você poderá fazer inúmeras visitas, desde que marcadas com os nossos colaboradores.</p><br>
 
 
-      <p><b><a href=" ${process.env.URL_MAILENDPOINT}/visitors/register?access=${tokenLink}&generatedId=${linkId}&bie=${destinataryBie}">Clique aqui!</a></b></p><br>
+      <p><b><a href=" ${process.env.URL_MAILENDPOINT}/visitors/register?access=${tokenLink}&generatedId=${linkId}&bie=${destinataryBie}&auth=${jwtToken}">Clique aqui!</a></b></p><br>
 
       <b>Obrigado!</b>
       `,

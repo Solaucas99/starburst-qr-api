@@ -1,14 +1,14 @@
 import { IVisitorsRepository } from '../../../repositories/visitors/IVisitorsRepository';
 import { IError } from '../../../../interfaces/IError';
 import { IVisitor } from '../../../entities/IVisitor';
-import { ICreateVisitorLinkRepository } from '../../../repositories/visitors/createVisitorLink/ICreateVisitorLinkRepository';
+import { ICreateUpdateVisitorLinkRepository } from '../../../repositories/visitors/updateVisitorLink/ICreateUpdateVisitorLinkRepository';
 
-export class ConfirmVisitorMailUseCase {
+export class ConfirmUpdateVisitorMailUseCase {
   private _errors: IError[] = [];
 
   constructor(
     private visitorsRepository: IVisitorsRepository,
-    private visitorLinkRepository: ICreateVisitorLinkRepository,
+    private updateVisitorLinkRepository: ICreateUpdateVisitorLinkRepository,
   ) {}
 
   public get errors(): IError[] {
@@ -22,7 +22,7 @@ export class ConfirmVisitorMailUseCase {
   public async execute(
     id: string,
     generated_pass: string,
-    visitorLinkId: string,
+    updateVisitorLinkId: string,
   ): Promise<IVisitor | void> {
     try {
       if (typeof generated_pass !== 'string' || generated_pass.length === 0) {
@@ -70,7 +70,9 @@ export class ConfirmVisitorMailUseCase {
       if (!updatedVisitor) throw new Error('Unexpected error');
 
       const clearVisitorLink =
-        await this.visitorLinkRepository.deleteVisitorLinkById(visitorLinkId);
+        await this.updateVisitorLinkRepository.deleteUpdateVisitorLinkById(
+          updateVisitorLinkId,
+        );
 
       if (!clearVisitorLink) {
         this._errors.push({
