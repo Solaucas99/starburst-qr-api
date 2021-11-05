@@ -1,12 +1,12 @@
 import createPassword from '../../../../services/utils/createPassword';
 import generateVisitorMail from '../../../../templates/VisitorMail';
 import { IVisitor } from '../../../entities/IVisitor';
-import { IMailProvider } from '../../../providers/mail/IMailProvider';
 import { IEncryptDataProvider } from '../../../providers/others/cryptojs/IEncryptDataProvider';
 import { IValidationProvider } from '../../../providers/validators/IValidationProvider';
 import { IVisitorsRepository } from '../../../repositories/visitors/IVisitorsRepository';
 import { ICreateUpdateVisitorLinkRepository } from '../../../repositories/visitors/updateVisitorLink/ICreateUpdateVisitorLinkRepository';
 import { IError } from '../../../../interfaces/IError';
+import { IMailQueueProvider } from '../../../providers/queue/IMailQueueProvider';
 
 export class UpdateVisitorUseCase {
   private _errors: IError[] = [];
@@ -14,7 +14,7 @@ export class UpdateVisitorUseCase {
   constructor(
     private visitorsRepository: IVisitorsRepository,
     private updateVisitorLinkRepository: ICreateUpdateVisitorLinkRepository,
-    private mailProvider: IMailProvider,
+    private mailQueueProvider: IMailQueueProvider,
     private encryptDataProvider: IEncryptDataProvider,
     private validationProvider: IValidationProvider,
   ) {}
@@ -87,21 +87,14 @@ export class UpdateVisitorUseCase {
 
         if (!newVisitor) throw new Error('Unexpected error');
 
-        const sendMail = await this.mailProvider.sendMail(
+        await this.mailQueueProvider.ToMailQueue(
           generateVisitorMail(
             visitor.email,
             visitor.nome as string,
             generated_pass,
           ),
+          'CodeSendVisitorMail',
         );
-
-        if (sendMail.rejected.length > 0) {
-          this._errors.push({
-            errStatus: 400,
-            errMessage: 'Um erro ocorreu ao enviar o e-mail, tente novamente.',
-          });
-          return;
-        }
 
         return newVisitor;
       }

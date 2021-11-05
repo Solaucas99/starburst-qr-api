@@ -2,7 +2,7 @@ import { IVisitsRepository } from '../../../repositories/visits/IVisitsRepositor
 import { IError } from '../../../../interfaces/IError';
 import { IDecryptDataProvider } from '../../../providers/others/cryptojs/IDecryptDataProvider';
 import { IVisitorsRepository } from '../../../repositories/visitors/IVisitorsRepository';
-import { IMailProvider } from '../../../providers/mail/IMailProvider';
+import { IMailQueueProvider } from '../../../providers/queue/IMailQueueProvider';
 import cancelVisitMail from '../../../../templates/CancelVisitMail';
 
 export class DeleteVisitUseCase {
@@ -12,7 +12,7 @@ export class DeleteVisitUseCase {
     private visitsRepository: IVisitsRepository,
     private visitorsRepository: IVisitorsRepository,
     private decryptDataProvider: IDecryptDataProvider,
-    private mailProvider: IMailProvider,
+    private mailQueueProvider: IMailQueueProvider,
   ) {}
 
   public get errors(): IError[] {
@@ -64,17 +64,10 @@ export class DeleteVisitUseCase {
 
       const decryptedMail = this.decryptDataProvider.executeAES(visitor.email);
 
-      const mail = await this.mailProvider.sendMail(
+      await this.mailQueueProvider.ToMailQueue(
         cancelVisitMail(decryptedMail, visitor.nome, visit),
+        'CancelVisitMail',
       );
-
-      if (mail.rejected.length > 0) {
-        this._errors.push({
-          errStatus: 400,
-          errMessage: 'Um erro ocorreu ao enviar o e-mail, tente novamente.',
-        });
-        return;
-      }
     } catch (err: any) {
       throw new Error(err);
     }

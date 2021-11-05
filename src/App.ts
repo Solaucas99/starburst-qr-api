@@ -6,6 +6,9 @@ import { connect } from 'mongoose';
 import rateLimit from 'express-rate-limit';
 import config from './services/dotenv/config';
 
+// Queue provider service
+import BullQueueProvider from './app/providers/queue/implementations/BullQueueProvider';
+
 export class App {
   public express: express.Application;
   public port: string | 3000 = process.env.API_PORT || 3000;
@@ -13,6 +16,7 @@ export class App {
   constructor(private routes: Router) {
     config();
     this.express = express();
+    this.startQueue();
     this.middlewares();
   }
 
@@ -24,6 +28,10 @@ export class App {
         console.log('listening on port ' + this.port);
       });
     });
+  }
+
+  private startQueue(): void {
+    BullQueueProvider.process();
   }
 
   private database(): void {
@@ -49,6 +57,14 @@ export class App {
       }),
     );
     this.express.use(express.static('./public'));
+    // this.express.use(
+    //   '/admin/queues',
+    //   (req, res, next) => {
+    //     console.log('Not a ');
+    //     next();
+    //   },
+    //   BullQueueProvider.getUI(),
+    // );
     this.express.use(this.routes);
     this.express.use(
       rateLimit({

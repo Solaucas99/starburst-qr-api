@@ -1,12 +1,12 @@
 import generateVisitMail from '../../../../templates/VisitMail';
 import { IVisit } from '../../../entities/IVisit';
-import { IMailProvider } from '../../../providers/mail/IMailProvider';
 import { IVisitsRepository } from '../../../repositories/visits/IVisitsRepository';
 import { IVisitorsRepository } from '../../../repositories/visitors/IVisitorsRepository';
 import { IError } from '../../../../interfaces/IError';
 import { IQRCodeGenerator } from '../../../providers/generators/qrcode/IQRCodeGenerator';
 import { IDecryptDataProvider } from '../../../providers/others/cryptojs/IDecryptDataProvider';
 import { IEncryptDataProvider } from '../../../providers/others/cryptojs/IEncryptDataProvider';
+import { IMailQueueProvider } from '../../../providers/queue/IMailQueueProvider';
 
 export class CreateVisitUseCase {
   private _errors: IError[] = [];
@@ -14,7 +14,7 @@ export class CreateVisitUseCase {
   constructor(
     private visitsRepository: IVisitsRepository,
     private visitorsRepository: IVisitorsRepository,
-    private mailProvider: IMailProvider,
+    private mailQueueProvider: IMailQueueProvider,
     private decryptDataProvider: IDecryptDataProvider,
     private encryptDataProvider: IEncryptDataProvider,
     private qrcodeGenerator: IQRCodeGenerator,
@@ -89,17 +89,10 @@ export class CreateVisitUseCase {
         email: this.decryptDataProvider.executeAES(visitorExists.email),
       };
 
-      const mail = await this.mailProvider.sendMail(
+      await this.mailQueueProvider.ToMailQueue(
         generateVisitMail(destinatary.email, destinatary.name, visit),
+        'ConfirmedVisitMail',
       );
-
-      if (mail.rejected.length > 0) {
-        this._errors.push({
-          errStatus: 400,
-          errMessage: 'Um erro ocorreu ao enviar o e-mail, tente novamente.',
-        });
-        return;
-      }
 
       return visit;
     } catch (err: any) {

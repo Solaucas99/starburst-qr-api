@@ -5,7 +5,6 @@ import JWT from 'jsonwebtoken';
 import createLinkToken from '../../../../services/utils/createLinkToken';
 // import VisitorLinkMail from '../../../../templates/VisitorLinkMail';
 // import { IVisitorLinkGen } from '../../../entities/IVisitorLinkGen';
-import { IMailProvider } from '../../../providers/mail/IMailProvider';
 import { IEncryptDataProvider } from '../../../providers/others/cryptojs/IEncryptDataProvider';
 import { IValidationProvider } from '../../../providers/validators/IValidationProvider';
 import { IError } from '../../../../interfaces/IError';
@@ -13,6 +12,7 @@ import { IVisitorsRepository } from '../../../repositories/visitors/IVisitorsRep
 import { ICreateUpdateVisitorLinkRepository } from '../../../repositories/visitors/updateVisitorLink/ICreateUpdateVisitorLinkRepository';
 import { IUpdateVisitorLinkGen } from '../../../entities/IUpdateVisitorLinkGen';
 import UpdateVisitorLinkMail from '../../../../templates/UpdateVisitorLinkMail';
+import { IMailQueueProvider } from '../../../providers/queue/IMailQueueProvider';
 
 export class CreateUpdateVisitorLinkUseCase {
   private _errors: IError[] = [];
@@ -20,7 +20,7 @@ export class CreateUpdateVisitorLinkUseCase {
   constructor(
     private updateVisitorLinkRepository: ICreateUpdateVisitorLinkRepository,
     private visitorsRepository: IVisitorsRepository,
-    private mailProvider: IMailProvider,
+    private mailQueueProvider: IMailQueueProvider,
     private encryptDataProvider: IEncryptDataProvider,
     private validationProvider: IValidationProvider,
   ) {}
@@ -92,7 +92,7 @@ export class CreateUpdateVisitorLinkUseCase {
         expiresIn: '4d',
       });
 
-      const sendMail = await this.mailProvider.sendMail(
+      await this.mailQueueProvider.ToMailQueue(
         UpdateVisitorLinkMail(
           email,
           mailHmacEncrypted,
@@ -101,15 +101,8 @@ export class CreateUpdateVisitorLinkUseCase {
           JWTtoken,
           updateVisitorLink._id,
         ),
+        'UpdateVisitorMail',
       );
-
-      if (sendMail.rejected.length > 0) {
-        this._errors.push({
-          errStatus: 400,
-          errMessage: 'Um erro ocorreu ao enviar o e-mail, tente novamente.',
-        });
-        return;
-      }
 
       return updateVisitorLink;
     } catch (err: any) {

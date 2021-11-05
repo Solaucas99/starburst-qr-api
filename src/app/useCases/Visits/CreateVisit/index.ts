@@ -4,13 +4,13 @@ import MongoUserRepository from '../../../repositories/visitors/implementations/
 import MongoVisitRepository from '../../../repositories/visits/implementations/MongoVisitRepository';
 import DecryptDataProvider from '../../../providers/others/cryptojs/implementations/DecryptDataProvider';
 import EncryptDataProvider from '../../../providers/others/cryptojs/implementations/EncryptDataProvider';
-import NodemailerProvider from '../../../providers/mail/implementations/NodemailerProvider';
+import BullQueueProvider from '../../../providers/queue/implementations/BullQueueProvider';
 import GenerateQRCodeImplementation from '../../../providers/generators/qrcode/implementations/GenerateQRCodeImplementation';
 
 const useCase = new CreateVisitUseCase(
   MongoVisitRepository,
   MongoUserRepository,
-  NodemailerProvider,
+  BullQueueProvider,
   DecryptDataProvider,
   EncryptDataProvider,
   GenerateQRCodeImplementation,

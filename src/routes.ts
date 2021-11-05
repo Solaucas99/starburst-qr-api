@@ -41,8 +41,12 @@ import { confirmUpdateVisitorMailController } from './app/useCases/Visitors/Conf
 // Tokens
 import { respondChallengeController } from './services/cognito/useCases/respondChallenge';
 import { refreshTokenController } from './services/cognito/useCases/refreshToken';
+import BullQueueProvider from './app/providers/queue/implementations/BullQueueProvider';
+// import BullQueueProvider from './app/providers/queue/implementations/BullQueueProvider';
 
 const routes = Router();
+
+routes.use('/admin/queues', requireLogin, BullQueueProvider.getUI());
 
 // -------- Cognito -------
 // Get User
@@ -241,5 +245,7 @@ routes.post(
 routes.get('*', (req, res) => {
   res.status(404).json({ message: 'Página não encontrada.' });
 });
+
+// const ui = BullQueueProvider.getUI();
 
 export default routes;

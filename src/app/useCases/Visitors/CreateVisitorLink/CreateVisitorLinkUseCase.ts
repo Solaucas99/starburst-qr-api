@@ -5,12 +5,12 @@ import path from 'path';
 import createLinkToken from '../../../../services/utils/createLinkToken';
 import VisitorLinkMail from '../../../../templates/VisitorLinkMail';
 import { IVisitorLinkGen } from '../../../entities/IVisitorLinkGen';
-import { IMailProvider } from '../../../providers/mail/IMailProvider';
 import { IEncryptDataProvider } from '../../../providers/others/cryptojs/IEncryptDataProvider';
 import { IValidationProvider } from '../../../providers/validators/IValidationProvider';
 import { ICreateVisitorLinkRepository } from '../../../repositories/visitors/createVisitorLink/ICreateVisitorLinkRepository';
 import { IError } from '../../../../interfaces/IError';
 import { IVisitorsRepository } from '../../../repositories/visitors/IVisitorsRepository';
+import { IMailQueueProvider } from '../../../providers/queue/IMailQueueProvider';
 
 export class CreateVisitorLinkUseCase {
   private _errors: IError[] = [];
@@ -18,7 +18,7 @@ export class CreateVisitorLinkUseCase {
   constructor(
     private visitorLinkRepository: ICreateVisitorLinkRepository,
     private visitorsRepository: IVisitorsRepository,
-    private mailProvider: IMailProvider,
+    private mailQueueProvider: IMailQueueProvider,
     private encryptDataProvider: IEncryptDataProvider,
     private validationProvider: IValidationProvider,
   ) {}
@@ -91,7 +91,7 @@ export class CreateVisitorLinkUseCase {
         expiresIn: '4d',
       });
 
-      const sendMail = await this.mailProvider.sendMail(
+      await this.mailQueueProvider.ToMailQueue(
         VisitorLinkMail(
           email,
           mailHmacEncrypted,
@@ -99,15 +99,8 @@ export class CreateVisitorLinkUseCase {
           JWTtoken,
           createdVisitorLink._id,
         ),
+        'SignUpVisitorMail',
       );
-
-      if (sendMail.rejected.length > 0) {
-        this._errors.push({
-          errStatus: 400,
-          errMessage: 'Um erro ocorreu ao enviar o e-mail, tente novamente.',
-        });
-        return;
-      }
 
       return createdVisitorLink;
     } catch (err: any) {

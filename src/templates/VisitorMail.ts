@@ -16,8 +16,7 @@ export default function generateVisitorMail(
     },
     subject: `Confirme seu Email! - ${process.env.ENTERPRISE_NAME} (Starburst QR)`,
     body: {
-      text: `Olá!
-      Agradecemos pelo seu cadastro em nosso site, mas ainda falta uma etapa.
+      text: `Olá visitante! 💼
 
       Insira o código abaixo na aba do seu cadastro em nosso site e clique em "Enviar" para verificar o seu e-mail!
 
