@@ -48,7 +48,7 @@ export class DeleteVisitUseCase {
       await this.visitsRepository.deleteVisitById(id);
 
       const visitor = await this.visitorsRepository.findVisitorById(
-        visit.visitor,
+        visit.visitor as string,
       );
 
       if (!visitor) {

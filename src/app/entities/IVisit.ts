@@ -1,8 +1,8 @@
-import { ObjectId } from 'mongoose';
+import { IVisitor } from './IVisitor';
 
 export interface IVisit {
   date: Date;
-  visitor: string | ObjectId;
+  visitor: string | null | IVisitor;
   finished?: boolean;
   qrcode?: string;
   _id?: string;

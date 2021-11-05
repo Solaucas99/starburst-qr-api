@@ -41,7 +41,7 @@ export class CreateVisitUseCase {
       }
 
       const visitorExists = await this.visitorsRepository.findVisitorById(
-        visitor,
+        visitor as string,
       );
 
       if (!visitorExists) {

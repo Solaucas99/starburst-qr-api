@@ -1,11 +1,11 @@
 import { IVisit } from '../../entities/IVisit';
-import { ObjectId } from 'mongoose';
 
 import { Document } from 'mongoose';
+import { IVisitor } from '../../entities/IVisitor';
 
 export type Attribute = {
   date?: Date;
-  visitor?: string | ObjectId;
+  visitor?: string | null | IVisitor;
   finished?: boolean;
 };
 

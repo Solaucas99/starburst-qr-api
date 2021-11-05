@@ -36,7 +36,11 @@ export class App {
   }
 
   private database(): void {
-    connect(process.env.CONNECTION as string)
+    const { DB_USER, DB_PASS, DB_HOST, DB_PORT, DB_NAME } = process.env;
+
+    connect(
+      `mongodb://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}?authSource=admin`,
+    )
       .then(() => {
         this.express.emit('connectReady');
         console.log('database connected');
