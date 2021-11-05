@@ -6,6 +6,7 @@
     "build": "tsc",
     "build:sucrase": "sucrase ./src -d ./dist --transforms typescript,imports",
     "production": "pm2 start dist/server.js --watch --no-daemon",
+    "start": "docker-compose up -d",
     "dev": "nodemon src/server.ts",
     "test": "$env:NODE_ENV=test & jest --runInBand --detectOpenHandles",
     "testLink": "$env:NODE_ENV=test & jest ValidateUpdateVisitorLinkUseCase --runInBand --detectOpenHandles",
