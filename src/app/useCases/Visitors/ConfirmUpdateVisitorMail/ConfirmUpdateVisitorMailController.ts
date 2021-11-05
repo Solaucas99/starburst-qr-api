@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { pinoLogger } from '../../../../services/pino/pinoLogger';
 import { ConfirmUpdateVisitorMailUseCase } from './ConfirmUpdateVisitorMailUseCase';
 
 export class ConfirmUpdateVisitorMailController {
@@ -32,6 +33,7 @@ export class ConfirmUpdateVisitorMailController {
         message: 'Visitante confirmado com sucesso!',
       });
     } catch (err: any) {
+      pinoLogger('error', err.message);
       return res.status(400).json({ message: 'Unexpected Error' });
     }
   }

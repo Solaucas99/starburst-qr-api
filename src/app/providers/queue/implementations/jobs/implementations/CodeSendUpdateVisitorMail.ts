@@ -17,8 +17,8 @@ class CodeSendUpdateVisitorMailJob implements IJobs {
     try {
       const { message }: { message: IMessage } = data;
       await this.mailProvider.sendMail(message);
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      throw new Error(err);
     }
   }
 }

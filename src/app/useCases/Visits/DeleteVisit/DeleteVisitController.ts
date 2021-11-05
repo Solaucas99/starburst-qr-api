@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { pinoLogger } from '../../../../services/pino/pinoLogger';
 import { DeleteVisitUseCase } from './DeleteVisitUseCase';
 
 export class DeleteVisitController {
@@ -20,6 +21,7 @@ export class DeleteVisitController {
 
       return res.status(200).json({ message: 'Visita removida com sucesso!' });
     } catch (err: any) {
+      pinoLogger('error', err.message);
       return res.status(400).json({ message: 'Unexpected Error' });
     }
   }

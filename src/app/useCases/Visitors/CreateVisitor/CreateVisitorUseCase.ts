@@ -1,18 +1,18 @@
 import createPassword from '../../../../services/utils/createPassword';
 import generateVisitorMail from '../../../../templates/VisitorMail';
 import { IVisitor } from '../../../entities/IVisitor';
-import { IMailProvider } from '../../../providers/mail/IMailProvider';
 import { IEncryptDataProvider } from '../../../providers/others/cryptojs/IEncryptDataProvider';
 import { IValidationProvider } from '../../../providers/validators/IValidationProvider';
 import { IVisitorsRepository } from '../../../repositories/visitors/IVisitorsRepository';
 import { IError } from '../../../../interfaces/IError';
+import { IMailQueueProvider } from '../../../providers/queue/IMailQueueProvider';
 
 export class CreateVisitorUseCase {
   private _errors: IError[] = [];
 
   constructor(
     private visitorsRepository: IVisitorsRepository,
-    private mailProvider: IMailProvider,
+    private mailQueueProvider: IMailQueueProvider,
     private encryptDataProvider: IEncryptDataProvider,
     private validationProvider: IValidationProvider,
   ) {}
@@ -85,17 +85,10 @@ export class CreateVisitorUseCase {
 
       if (!createdVisitor) throw new Error('Unexpected error');
 
-      const sendMail = await this.mailProvider.sendMail(
+      await this.mailQueueProvider.ToMailQueue(
         generateVisitorMail(email, visitor.nome, generated_pass),
+        'CodeSendVisitorMail',
       );
-
-      if (sendMail.rejected.length > 0) {
-        this._errors.push({
-          errStatus: 400,
-          errMessage: 'Um erro ocorreu ao enviar o e-mail, tente novamente.',
-        });
-        return;
-      }
 
       return createdVisitor;
     } catch (err: any) {

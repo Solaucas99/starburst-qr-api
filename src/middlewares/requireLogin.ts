@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import axios from 'axios';
 import JWKtoPem from 'jwk-to-pem';
 import jwt from 'jsonwebtoken';
+import { pinoLogger } from '../services/pino/pinoLogger';
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ export async function requireLogin(
       { algorithms: ['RS256'] },
       (err, decoded) => {
         if (err) {
+          pinoLogger('error', err.message);
           return res.status(401).json({ message: err.message });
         }
 
@@ -54,6 +56,7 @@ export async function requireLogin(
       { algorithms: ['RS256'] },
       (err, decoded) => {
         if (err) {
+          pinoLogger('error', err.message);
           return res.status(401).json({ message: err.message });
         }
 
@@ -71,6 +74,7 @@ export async function requireLogin(
 
     next();
   } catch (err: any) {
+    pinoLogger('error', err.message);
     return res.status(401).json({ message: err.message });
   }
 }

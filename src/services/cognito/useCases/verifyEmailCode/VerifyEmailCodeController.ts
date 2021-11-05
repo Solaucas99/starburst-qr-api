@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { pinoLogger } from '../../../pino/pinoLogger';
 import { VerifyEmailCodeUseCase } from './VerifyEmailCodeUseCase';
 // import { ResendSignUpCodeProtocol } from '../../../../interfaces/AWSCognito/ResendSignUpCodeProtocol';
 
@@ -30,7 +31,7 @@ export class VerifyEmailCodeController {
         message: `Bem-vindo ${username}. Seu cadastro foi confirmado com sucesso!`,
       });
     } catch (err: any) {
-      console.log(err);
+      pinoLogger('error', err.message);
       return res.status(400).json({
         message: err.message || 'Unexpected error',
       });

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { pinoLogger } from '../../../pino/pinoLogger';
 import { UpdateUserAttrUseCase } from './UpdateUserAttrUseCase';
 
 export class UpdateUserAttrController {
@@ -35,7 +36,7 @@ export class UpdateUserAttrController {
         message: 'Atributo atualizado com sucesso',
       });
     } catch (err: any) {
-      console.log(err);
+      pinoLogger('error', err.message);
       return res.status(400).json({
         message: err.message || 'Unexpected error',
       });
@@ -65,7 +66,7 @@ export class UpdateUserAttrController {
         message: `Seu código foi confirmado com sucesso!`,
       });
     } catch (err: any) {
-      console.log(err);
+      pinoLogger('error', err.message);
       return res.status(400).json({
         message: err.message || 'Unexpected error',
       });

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { RespondChallengeUseCase } from './RespondChallengeUseCase';
 import { RespondChallengeProtocol } from '../../../../interfaces/AWSCognito/RespondChallengeProtocol';
+import { pinoLogger } from '../../../pino/pinoLogger';
 
 export class RespondChallengeController {
   constructor(private respondChallengeUseCase: RespondChallengeUseCase) {
@@ -41,7 +42,7 @@ export class RespondChallengeController {
 
       return res.status(200).json(data);
     } catch (err: any) {
-      console.log(err);
+      pinoLogger('error', err.message);
       return res.status(400).json({
         message: err.message || 'Unexpected error',
       });

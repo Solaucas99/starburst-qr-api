@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { RefreshTokenUseCase } from './RefreshTokenUseCase';
 import { RefreshTokenProtocol } from '../../../../interfaces/AWSCognito/RefreshTokenProtocol';
+import { pinoLogger } from '../../../pino/pinoLogger';
 
 export class RefreshTokenController {
   constructor(private refreshTokenUseCase: RefreshTokenUseCase) {
@@ -28,7 +29,7 @@ export class RefreshTokenController {
 
       return res.status(200).json(data);
     } catch (err: any) {
-      console.log(err);
+      pinoLogger('error', err.message);
       return res.status(400).json({
         message: err.message || 'Unexpected error',
       });

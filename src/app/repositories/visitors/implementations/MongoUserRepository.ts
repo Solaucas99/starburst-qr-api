@@ -1,3 +1,4 @@
+import { pinoLogger } from '../../../../services/pino/pinoLogger';
 import { IVisitor } from '../../../entities/IVisitor';
 import { IVisitorsRepository, Attribute } from '../IVisitorsRepository';
 import VisitorsSchema from '../schema/VisitorsSchema';
@@ -10,6 +11,7 @@ class MongoUserRepository implements IVisitorsRepository {
 
       return visitorObject;
     } catch (err: any) {
+      pinoLogger('fatal', err.message);
       throw new Error(err);
     }
   }
@@ -20,6 +22,7 @@ class MongoUserRepository implements IVisitorsRepository {
 
       return visitors;
     } catch (err: any) {
+      pinoLogger('fatal', err.message);
       throw new Error(err);
     }
   }
@@ -32,6 +35,7 @@ class MongoUserRepository implements IVisitorsRepository {
 
       return visitorObject;
     } catch (err: any) {
+      pinoLogger('fatal', err.message);
       throw new Error(err);
     }
   }
@@ -42,6 +46,7 @@ class MongoUserRepository implements IVisitorsRepository {
 
       return visitorObject;
     } catch (err: any) {
+      pinoLogger('fatal', err.message);
       throw new Error(err);
     }
   }
@@ -61,6 +66,7 @@ class MongoUserRepository implements IVisitorsRepository {
 
       return visitorObject;
     } catch (err: any) {
+      pinoLogger('fatal', err.message);
       throw new Error(err);
     }
   }
@@ -71,6 +77,7 @@ class MongoUserRepository implements IVisitorsRepository {
 
       return visitorObject;
     } catch (err: any) {
+      pinoLogger('fatal', err.message);
       throw new Error(err);
     }
   }

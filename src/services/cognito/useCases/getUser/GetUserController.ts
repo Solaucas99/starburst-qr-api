@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { pinoLogger } from '../../../pino/pinoLogger';
 import { GetUserUseCase } from './GetUserUseCase';
 
 export class GetUserController {
@@ -14,7 +15,10 @@ export class GetUserController {
 
       return res.status(200).json({ data });
     } catch (err: any) {
-      throw new Error(err);
+      pinoLogger('error', err.message);
+      return res.status(400).json({
+        message: err.message || 'Unexpected error',
+      });
     }
   }
 }

@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { pinoLogger } from '../../../../services/pino/pinoLogger';
 import { IVisit } from '../../../entities/IVisit';
 import { IVisitsRepository, Attribute } from '../IVisitsRepository';
 import VisitsSchema from '../schema/VisitsSchema';
@@ -10,6 +11,7 @@ class MongoVisitRepository implements IVisitsRepository {
 
       return visitObject.populate('visitor');
     } catch (err: any) {
+      pinoLogger('fatal', err.message);
       throw new Error(err);
     }
   }
@@ -23,6 +25,7 @@ class MongoVisitRepository implements IVisitsRepository {
 
       return visits;
     } catch (err: any) {
+      pinoLogger('fatal', err.message);
       throw new Error(err);
     }
   }
@@ -38,6 +41,7 @@ class MongoVisitRepository implements IVisitsRepository {
 
       return visitObject;
     } catch (err: any) {
+      pinoLogger('fatal', err.message);
       throw new Error(err);
     }
   }
@@ -48,6 +52,7 @@ class MongoVisitRepository implements IVisitsRepository {
 
       return visitObject;
     } catch (err: any) {
+      pinoLogger('fatal', err.message);
       throw new Error(err);
     }
   }
@@ -58,6 +63,7 @@ class MongoVisitRepository implements IVisitsRepository {
 
       return visitObject;
     } catch (err: any) {
+      pinoLogger('fatal', err.message);
       throw new Error(err);
     }
   }

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { pinoLogger } from '../../../pino/pinoLogger';
 import { ResendVerificationCodeUseCase } from './ResendVerificationCodeUseCase';
 // import { ResendSignUpCodeProtocol } from '../../../../interfaces/AWSCognito/ResendSignUpCodeProtocol';
 
@@ -31,7 +32,7 @@ export class ResendVerificationCodeController {
         destination: CodeDeliveryDetails?.Destination,
       });
     } catch (err: any) {
-      console.log(err);
+      pinoLogger('error', err.message);
       return res.status(400).json({
         message: err.message || 'Unexpected error',
       });

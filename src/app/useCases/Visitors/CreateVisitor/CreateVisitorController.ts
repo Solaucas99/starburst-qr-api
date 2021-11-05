@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { pinoLogger } from '../../../../services/pino/pinoLogger';
 import { CreateVisitorUseCase } from './CreateVisitorUseCase';
 
 export class CreateVisitorController {
@@ -30,6 +31,7 @@ export class CreateVisitorController {
         visitorId: visitor?._id,
       });
     } catch (err: any) {
+      pinoLogger('error', err.message);
       return res.status(400).json({ message: 'Unexpected Error' });
     }
   }

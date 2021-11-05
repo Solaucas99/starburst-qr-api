@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { pinoLogger } from '../pino/pinoLogger';
 
 export default function createStaticContentDirectory(
   folderToCreate: string,
@@ -11,7 +12,10 @@ export default function createStaticContentDirectory(
     fs.mkdir(
       `${process.env.STATIC_CONTENT_FOLDER as string}/${folderToCreate}`,
       (err) => {
-        if (err) throw err;
+        if (err) {
+          pinoLogger('fatal', err.message);
+          throw err;
+        }
       },
     );
   }

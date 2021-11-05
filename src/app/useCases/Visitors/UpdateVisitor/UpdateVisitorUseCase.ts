@@ -93,7 +93,7 @@ export class UpdateVisitorUseCase {
             visitor.nome as string,
             generated_pass,
           ),
-          'CodeSendVisitorMail',
+          'CodeSendUpdateVisitorMail',
         );
 
         return newVisitor;

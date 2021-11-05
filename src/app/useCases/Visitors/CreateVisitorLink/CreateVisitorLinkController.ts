@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { pinoLogger } from '../../../../services/pino/pinoLogger';
 import { CreateVisitorLinkUseCase } from './CreateVisitorLinkUseCase';
 
 export class CreateVisitorLinkController {
@@ -26,6 +27,7 @@ export class CreateVisitorLinkController {
           'E-mail enviado para o visitante. Assim que ele efetuar o cadastro, ele aparecerá na lista de visitantes.',
       });
     } catch (err: any) {
+      pinoLogger('error', err.message);
       return res.status(400).json({ message: 'Unexpected Error' });
     }
   }

@@ -7,6 +7,7 @@ import { IMessage } from '../../mail/IMailProvider';
 import redisConfig from '../config/redis';
 import * as jobs from './jobs';
 import { IMailQueueProvider, TQueuesName } from '../IMailQueueProvider';
+import { pinoLogger } from '../../../../services/pino/pinoLogger';
 
 class BullQueueProvider implements IMailQueueProvider {
   constructor() {
@@ -39,9 +40,14 @@ class BullQueueProvider implements IMailQueueProvider {
     message: IMessage,
     queueName: TQueuesName,
   ): Promise<Queue.Job<any> | undefined> {
-    const queue = this.queues.find((queue) => queue.name === queueName);
+    try {
+      const queue = this.queues.find((queue) => queue.name === queueName);
 
-    return await queue?.bull.add({ message }, queue.options);
+      return await queue?.bull.add({ message }, queue.options);
+    } catch (err: any) {
+      pinoLogger('error', err.message);
+      throw new Error(err);
+    }
   }
 
   public process(): void {

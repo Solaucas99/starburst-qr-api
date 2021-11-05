@@ -1,6 +1,7 @@
 import nodemailer, { Transporter, SentMessageInfo } from 'nodemailer';
 import { IMailProvider, IMessage } from '../IMailProvider';
 import config from '../../../../services/dotenv/config';
+import { pinoLogger } from '../../../../services/pino/pinoLogger';
 
 class NodemailerProvider implements IMailProvider {
   private mailTransport: Transporter;
@@ -38,7 +39,7 @@ class NodemailerProvider implements IMailProvider {
 
       return mail;
     } catch (err: any) {
-      console.log(err);
+      pinoLogger('error', err.message);
       throw new Error(err);
     }
   }

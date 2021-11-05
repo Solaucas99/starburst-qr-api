@@ -1,6 +1,7 @@
 import CreationVisitorLinkSchema from '../schema/CreationVisitorLinkSchema';
 import { ICreateVisitorLinkRepository } from '../ICreateVisitorLinkRepository';
 import { IVisitorLinkGen } from '../../../../entities/IVisitorLinkGen';
+import { pinoLogger } from '../../../../../services/pino/pinoLogger';
 
 class MongoCreationLinkRepository implements ICreateVisitorLinkRepository {
   public async createVisitorLink(
@@ -11,6 +12,7 @@ class MongoCreationLinkRepository implements ICreateVisitorLinkRepository {
 
       return link;
     } catch (err: any) {
+      pinoLogger('fatal', err.message);
       throw new Error(err);
     }
   }
@@ -23,6 +25,7 @@ class MongoCreationLinkRepository implements ICreateVisitorLinkRepository {
 
       return link;
     } catch (err: any) {
+      pinoLogger('fatal', err.message);
       throw new Error(err);
     }
   }
@@ -39,6 +42,7 @@ class MongoCreationLinkRepository implements ICreateVisitorLinkRepository {
 
       return link;
     } catch (err: any) {
+      pinoLogger('fatal', err.message);
       throw new Error(err);
     }
   }
@@ -51,6 +55,7 @@ class MongoCreationLinkRepository implements ICreateVisitorLinkRepository {
 
       return link;
     } catch (err: any) {
+      pinoLogger('fatal', err.message);
       throw new Error(err);
     }
   }

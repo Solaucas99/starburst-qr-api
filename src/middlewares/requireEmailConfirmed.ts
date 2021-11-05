@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
+import { pinoLogger } from '../services/pino/pinoLogger';
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ export async function requireEmailConfirmed(
     }
     next();
   } catch (err: any) {
+    pinoLogger('error', err.message);
     return res.status(401).json({ message: err.message });
   }
 }

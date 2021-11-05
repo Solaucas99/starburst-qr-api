@@ -8,6 +8,7 @@ import config from './services/dotenv/config';
 
 // Queue provider service
 import BullQueueProvider from './app/providers/queue/implementations/BullQueueProvider';
+import { pinoLogger } from './services/pino/pinoLogger';
 
 export class App {
   public express: express.Application;
@@ -41,7 +42,7 @@ export class App {
         console.log('database connected');
       })
       .catch((err) => {
-        console.log(err);
+        pinoLogger('fatal', err.message);
       });
   }
 
@@ -57,14 +58,6 @@ export class App {
       }),
     );
     this.express.use(express.static('./public'));
-    // this.express.use(
-    //   '/admin/queues',
-    //   (req, res, next) => {
-    //     console.log('Not a ');
-    //     next();
-    //   },
-    //   BullQueueProvider.getUI(),
-    // );
     this.express.use(this.routes);
     this.express.use(
       rateLimit({

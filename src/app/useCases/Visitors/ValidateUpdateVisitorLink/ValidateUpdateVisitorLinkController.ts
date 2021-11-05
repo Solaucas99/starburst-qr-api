@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { pinoLogger } from '../../../../services/pino/pinoLogger';
 import { ValidateUpdateVisitorLinkUseCase } from './ValidateUpdateVisitorLinkUseCase';
 
 export class ValidateUpdateVisitorLinkController {
@@ -41,6 +42,7 @@ export class ValidateUpdateVisitorLinkController {
         is_in_validation: false,
       });
     } catch (err: any) {
+      pinoLogger('error', err.message);
       return res.status(400).json({ message: 'Unexpected Error' });
     }
   }

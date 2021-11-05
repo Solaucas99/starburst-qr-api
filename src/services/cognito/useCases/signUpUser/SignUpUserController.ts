@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { pinoLogger } from '../../../pino/pinoLogger';
 import { SignUpUserUseCase } from './SignUpUserUseCase';
 
 export class SignUpUserController {
@@ -29,6 +30,7 @@ export class SignUpUserController {
         message: `Recebemos seus dados de cadastro, mas ainda falta uma etapa. Você precisa confirmar seu e-mail para continuar. Acesse o email ${CodeDeliveryDetails['Destination']} e envie o código recebido a seguir`,
       });
     } catch (err: any) {
+      pinoLogger('error', err.message);
       return res.status(400).json({
         message: err.message || 'Unexpected error',
       });
@@ -57,6 +59,7 @@ export class SignUpUserController {
         message: `Bem-vindo ${username}. Seu cadastro foi confirmado com sucesso!`,
       });
     } catch (err: any) {
+      pinoLogger('error', err.message);
       return res.status(400).json({
         message: err.message || 'Unexpected error',
       });
