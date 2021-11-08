@@ -2,6 +2,9 @@ import { Request, Response } from 'express';
 import { RefreshTokenUseCase } from './RefreshTokenUseCase';
 import { RefreshTokenProtocol } from '../../../../interfaces/AWSCognito/RefreshTokenProtocol';
 import { pinoLogger } from '../../../pino/pinoLogger';
+import config from '../../../../services/dotenv/config';
+
+config();
 
 export class RefreshTokenController {
   constructor(private refreshTokenUseCase: RefreshTokenUseCase) {
@@ -22,15 +25,15 @@ export class RefreshTokenController {
       res.cookie('idToken', data.AuthenticationResult?.IdToken, {
         httpOnly: false,
         maxAge: 1000 * 60 * 60,
-        domain: process.env.URL_MAILENDPOINT,
         secure: true,
+        domain: process.env.FRONTEND_DOMAIN,
       });
 
       res.cookie('accessToken', data.AuthenticationResult?.AccessToken, {
         httpOnly: false,
         maxAge: 1000 * 60 * 60,
-        domain: process.env.URL_MAILENDPOINT,
         secure: true,
+        domain: process.env.FRONTEND_DOMAIN,
       });
 
       return res.status(200).json(data);

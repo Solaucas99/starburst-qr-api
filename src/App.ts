@@ -53,7 +53,7 @@ export class App {
     this.express.use(express.urlencoded({ limit: '20mb', extended: true }));
     this.express.use(
       cors({
-        origin: 'https://starburst-qr.vercel.app',
+        origin: 'https://www.starburst-qr.online',
         credentials: true,
         methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
       }),
@@ -66,7 +66,7 @@ export class App {
         max: 100,
       }),
     );
-    this.express.set('trust proxy', 'loopback');
+    this.express.set('trust proxy', 1);
   }
 }
 

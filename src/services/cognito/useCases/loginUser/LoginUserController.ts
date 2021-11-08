@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import { pinoLogger } from '../../../pino/pinoLogger';
 import { LoginUserUseCase } from './LoginUserUseCase';
+import config from '../../../../services/dotenv/config';
+
+config();
 
 export class LoginUserController {
   constructor(private loginUserUseCase: LoginUserUseCase) {
@@ -19,22 +22,22 @@ export class LoginUserController {
       res.cookie('idToken', data.AuthenticationResult?.IdToken, {
         httpOnly: false,
         maxAge: 1000 * 60 * 60,
-        domain: process.env.URL_MAILENDPOINT,
         secure: true,
+        domain: process.env.FRONTEND_DOMAIN,
       });
 
       res.cookie('accessToken', data.AuthenticationResult?.AccessToken, {
         httpOnly: false,
         maxAge: 1000 * 60 * 60,
-        domain: process.env.URL_MAILENDPOINT,
         secure: true,
+        domain: process.env.FRONTEND_DOMAIN,
       });
 
       res.cookie('refreshToken', data.AuthenticationResult?.RefreshToken, {
         httpOnly: false,
         maxAge: 1000 * 60 * 60 * 24 * 30,
-        domain: process.env.URL_MAILENDPOINT,
         secure: true,
+        domain: process.env.FRONTEND_DOMAIN,
       });
 
       return res.status(200).json(data);
