@@ -30,14 +30,23 @@ export class RespondChallengeController {
 
       res.cookie('idToken', data.AuthenticationResult?.IdToken, {
         httpOnly: false,
+        maxAge: 1000 * 60 * 60,
+        domain: process.env.URL_MAILENDPOINT,
+        secure: true,
       });
 
       res.cookie('accessToken', data.AuthenticationResult?.AccessToken, {
         httpOnly: false,
+        maxAge: 1000 * 60 * 60,
+        domain: process.env.URL_MAILENDPOINT,
+        secure: true,
       });
 
       res.cookie('refreshToken', data.AuthenticationResult?.RefreshToken, {
         httpOnly: false,
+        maxAge: 1000 * 60 * 60 * 24 * 30,
+        domain: process.env.URL_MAILENDPOINT,
+        secure: true,
       });
 
       return res.status(200).json(data);

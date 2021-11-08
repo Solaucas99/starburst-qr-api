@@ -21,10 +21,16 @@ export class RefreshTokenController {
 
       res.cookie('idToken', data.AuthenticationResult?.IdToken, {
         httpOnly: false,
+        maxAge: 1000 * 60 * 60,
+        domain: process.env.URL_MAILENDPOINT,
+        secure: true,
       });
 
       res.cookie('accessToken', data.AuthenticationResult?.AccessToken, {
         httpOnly: false,
+        maxAge: 1000 * 60 * 60,
+        domain: process.env.URL_MAILENDPOINT,
+        secure: true,
       });
 
       return res.status(200).json(data);
