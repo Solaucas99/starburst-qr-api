@@ -12,7 +12,7 @@ import { pinoLogger } from './services/pino/pinoLogger';
 
 export class App {
   public express: express.Application;
-  public port: string | 3000 = process.env.API_PORT || 3000;
+  public port: string | 5000 = process.env.PORT || 5000;
 
   constructor(private routes: Router) {
     config();
@@ -36,11 +36,7 @@ export class App {
   }
 
   private database(): void {
-    const { DB_USER, DB_PASS, DB_HOST, DB_PORT, DB_NAME } = process.env;
-
-    connect(
-      `mongodb://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}?authSource=admin`,
-    )
+    connect(process.env.CONNECTION as string)
       .then(() => {
         this.express.emit('connectReady');
         console.log('database connected');
@@ -57,8 +53,9 @@ export class App {
     this.express.use(express.urlencoded({ limit: '20mb', extended: true }));
     this.express.use(
       cors({
-        origin: 'http://localhost:3001',
+        origin: 'https://starburst-qr.vercel.app',
         credentials: true,
+        methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
       }),
     );
     this.express.use(express.static('./public'));

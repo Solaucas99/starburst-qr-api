@@ -18,7 +18,7 @@ class BullQueueProvider implements IMailQueueProvider {
 
   public queues = Object.values(jobs).map((job) => {
     return {
-      bull: new Queue(job.key, redisConfig),
+      bull: new Queue(job.key, redisConfig.url),
       name: job.key,
       handle: job.handle,
       options: job.options,

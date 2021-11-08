@@ -6,3 +6,4 @@ prettierrc
 globalConfig.json
 .env.test
 .eslintrc.js
+docker-compose.yml

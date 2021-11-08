@@ -3,10 +3,8 @@
   "version": "1.0.0",
   "main": "app.ts",
   "scripts": {
-    "build": "tsc",
-    "build:sucrase": "sucrase ./src -d ./dist --transforms typescript,imports",
-    "production": "pm2 start dist/server.js --watch --no-daemon",
-    "start": "npm i -g docker-compose && docker-compose up -d",
+    "build": "sucrase ./src -d ./dist --transforms typescript,imports",
+    "start": "pm2 start ecosystem.config.js --no-daemon",
     "dev": "nodemon src/server.ts",
     "test": "$env:NODE_ENV=test & jest --runInBand --detectOpenHandles",
     "testLink": "$env:NODE_ENV=test & jest ValidateUpdateVisitorLinkUseCase --runInBand --detectOpenHandles",
