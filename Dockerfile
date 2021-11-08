@@ -12,7 +12,7 @@ RUN npm run build
 
 COPY ./public ./dist/public
 
-COPY ./src/utils/jwk ./dist/src/utils/jwk
+COPY ./src/utils/jwk ./dist/utils/jwk
 
 EXPOSE 5000
 

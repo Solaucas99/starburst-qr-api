@@ -43,8 +43,10 @@ export default function generateVisitMail(
       html: `
       <html>
           <body style="display: flex;align-items: center;justify-content: center;font-family: Verdana, Geneva, Tahoma, sans-serif;font-size: 14px;">
-              <div class="background" style="background: url(http://localhost:3000/emailimages/mailbackground.png);background-repeat: no-repeat;background-size: 760px 900px;height: 900px;width: 760px;display: flex;flex-direction: column;justify-content: space-around;align-items: center;">
-                  <img src="http://localhost:3000/emailimages/logo.png">
+              <div class="background" style="background: url(${
+                process.env.BASE_URL
+              }/emailimages/mailbackground.png);background-repeat: no-repeat;background-size: 760px 900px;height: 900px;width: 760px;display: flex;flex-direction: column;justify-content: space-around;align-items: center;">
+                  <img src="${process.env.BASE_URL}/emailimages/logo.png">
                   <div class="content" style="background: #eeeeee;width: 80%;height: 80%;display: flex;flex-direction: column;justify-content: space-between;align-items: center;padding: 20px;">
                   <h2>Olá visitante! 💼</h2>
 
