@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { connect } from 'mongoose';
 import rateLimit from 'express-rate-limit';
+import path from 'path';
 import config from './services/dotenv/config';
 
 // Queue provider service
@@ -51,14 +52,29 @@ export class App {
     this.express.use(helmet());
     this.express.use(cookieParser());
     this.express.use(express.urlencoded({ limit: '20mb', extended: true }));
+    this.express.use(express.static(path.resolve(__dirname, '..', 'public')));
+
+    const whitelist = [
+      'http://localhost:3001',
+      'https://starburst-qr.online',
+      'https://www.starburst-qr.online',
+    ];
+    const corsOptions = (origin, callback) => {
+      if (whitelist.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    };
+
     this.express.use(
       cors({
-        origin: 'https://www.starburst-qr.online',
+        origin: corsOptions,
         credentials: true,
         methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
       }),
     );
-    this.express.use(express.static('./public'));
+
     this.express.use(this.routes);
     this.express.use(
       rateLimit({

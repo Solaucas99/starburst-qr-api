@@ -14,7 +14,6 @@ class NodemailerProvider implements IMailProvider {
       tls: {
         ciphers: 'SSLv3',
       },
-      secure: true,
       auth: {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASS,
