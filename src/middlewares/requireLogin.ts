@@ -19,8 +19,9 @@ export async function requireLogin(
 
     if (!data.data.keys) throw new Error('Unexpected Error has ocurred');
 
-    const idToken = req.cookies.idToken;
-    const accessToken = req.cookies.accessToken;
+    const header: string[] | undefined = req.headers.authorization?.split(',');
+    const idToken = header ? header[0].replace('Bearer ', '') : undefined;
+    const accessToken = header ? header[1].replace(' Basic ', '') : undefined;
 
     if (!idToken || !accessToken)
       return res

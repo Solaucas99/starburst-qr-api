@@ -22,20 +22,6 @@ export class RefreshTokenController {
         refresh_token,
       });
 
-      res.cookie('idToken', data.AuthenticationResult?.IdToken, {
-        httpOnly: false,
-        maxAge: 1000 * 60 * 60,
-        secure: true,
-        domain: process.env.FRONTEND_DOMAIN,
-      });
-
-      res.cookie('accessToken', data.AuthenticationResult?.AccessToken, {
-        httpOnly: false,
-        maxAge: 1000 * 60 * 60,
-        secure: true,
-        domain: process.env.FRONTEND_DOMAIN,
-      });
-
       return res.status(200).json(data);
     } catch (err: any) {
       pinoLogger('error', err.message);

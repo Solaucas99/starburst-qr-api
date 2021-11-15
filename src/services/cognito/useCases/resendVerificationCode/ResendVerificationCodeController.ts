@@ -11,7 +11,9 @@ export class ResendVerificationCodeController {
   }
 
   public async handle(req: Request, res: Response): Promise<Response> {
-    const access_token = req.cookies.accessToken;
+    const header: string[] | undefined = req.headers.authorization?.split(',');
+
+    const access_token = header ? header[1].replace(' Basic ', '') : undefined;
 
     if (!access_token)
       return res

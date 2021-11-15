@@ -9,7 +9,9 @@ export class VerifyEmailCodeController {
   }
 
   public async handle(req: Request, res: Response): Promise<Response> {
-    const access_token = req.cookies.accessToken;
+    const header: string[] | undefined = req.headers.authorization?.split(',');
+
+    const access_token = header ? header[1].replace(' Basic ', '') : undefined;
     const { code } = req.body;
     const username = req.payload['cognito:username'];
 

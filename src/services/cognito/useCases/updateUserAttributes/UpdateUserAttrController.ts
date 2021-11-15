@@ -15,12 +15,14 @@ export class UpdateUserAttrController {
   ): Promise<Response> {
     const { attribute } = req.body;
 
-    const { acc_token } = req.cookies;
+    const header: string[] | undefined = req.headers.authorization?.split(',');
+
+    const acc_token = header ? header[1].replace(' Basic ', '') : undefined;
 
     try {
       const { CodeDeliveryDetailsList } =
         await this.updateUserAttrUseCase.updateUserAttr({
-          accessToken: acc_token,
+          accessToken: acc_token as string,
           attribute: attribute,
         });
 

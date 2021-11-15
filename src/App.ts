@@ -54,23 +54,22 @@ export class App {
     this.express.use(express.urlencoded({ limit: '20mb', extended: true }));
     this.express.use(express.static(path.resolve(__dirname, '..', 'public')));
 
-    const whitelist = [
-      'http://localhost:3001',
-      'https://starburst-qr.online',
-      'https://www.starburst-qr.online',
-    ];
-    const corsOptions = (origin, callback) => {
-      if (whitelist.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    };
+    // const whitelist = [
+    //   'http://localhost:3001',
+    //   'https://starburst-qr.online',
+    //   'https://www.starburst-qr.online',
+    // ];
+    // const corsOptions = (origin, callback) => {
+    //   if (whitelist.indexOf(origin) !== -1) {
+    //     callback(null, true);
+    //   } else {
+    //     callback(new Error('Not allowed by CORS'));
+    //   }
+    // };
 
     this.express.use(
       cors({
-        origin: corsOptions,
-        credentials: true,
+        credentials: false,
         methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
       }),
     );
