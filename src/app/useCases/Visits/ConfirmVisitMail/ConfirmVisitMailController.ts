@@ -12,9 +12,9 @@ export class ConfirmVisitMailController {
     res: Response,
   ): Promise<Response> {
     try {
-      const { id } = req.params;
+      const { data } = req.body;
 
-      const visit = await this.confirmVisitMailUseCase.execute(id);
+      const visit = await this.confirmVisitMailUseCase.execute(data);
 
       if (this.confirmVisitMailUseCase.errors.length > 0) {
         const err = this.confirmVisitMailUseCase.errors[0];

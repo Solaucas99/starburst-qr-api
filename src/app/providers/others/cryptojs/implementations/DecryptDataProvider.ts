@@ -10,7 +10,7 @@ class DecryptDataProvider implements IDecryptDataProvider {
       process.env.SECRET_CRYPTO_JS as string,
     ).toString(cryptojs.enc.Utf8);
 
-    return decrypt.replace(/(["])/g, ''); //eslint-disable-line
+    return JSON.parse(decrypt); //eslint-disable-line
   }
 }
 

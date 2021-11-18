@@ -1,4 +1,6 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
+
+import config from './services/dotenv/config';
 
 // CognitoService
 import { signUpController } from './services/cognito/useCases/signUpUser/index';
@@ -46,6 +48,7 @@ import { refreshTokenController } from './services/cognito/useCases/refreshToken
 import BullQueueProvider from './app/providers/queue/implementations/BullQueueProvider';
 
 const routes = Router();
+config();
 
 // Routes.use
 routes.use('/admin/queues', requireLogin, BullQueueProvider.getUI());
@@ -180,8 +183,8 @@ routes.delete(
 );
 
 //ConfirmVisit
-routes.get(
-  '/visits/confirmvisit/:id',
+routes.post(
+  '/visits/confirmvisit',
   requireLogin,
   requireEmailConfirmed,
   confirmVisitMailController.confirmVisitMail,
@@ -240,6 +243,17 @@ routes.post(
 //     token: JWTtoken,
 //   });
 // });
+
+routes.get(
+  '/crypto/secret',
+  requireLogin,
+  requireEmailConfirmed,
+  (req: Request, res: Response) => {
+    return res.json({
+      secret: process.env.SECRET_CRYPTO_JS,
+    });
+  },
+);
 
 // ----------- 404 ------------
 
